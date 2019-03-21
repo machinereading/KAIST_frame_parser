@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[78]:
+# In[1]:
 
 
 import json
@@ -26,7 +26,7 @@ from koreanframenet import koreanframenet
 kfn = koreanframenet.interface(version)
 
 
-# In[105]:
+# In[8]:
 
 
 from konlpy.tag import Kkma
@@ -48,19 +48,21 @@ def targetize(word):
                 r = morps[i-1][0]+m
                 if r[0] == word[0]:
                     result.append(r)
-#     else:
-    pos_list = []
-    for m,p in morps:
-        if p.startswith('J'):
-            pos_list.append(m)
-    for m, p in morps:
-        if p == 'NNG':
-            if len(pos_list) == 0:
-                if m == word:
-                    result.append(m)
-            else:
-                if m[0] == word[0]:
-                    result.append(m)
+    else:
+        pos_list = []
+        for m,p in morps:
+            if p.startswith('J'):
+                pos_list.append(m)
+            elif p == 'VCP' or p == 'EFN':
+                pos_list.append(m)
+        for m, p in morps:
+            if p == 'NNG':
+                if len(pos_list) == 0:
+                    if m == word:
+                        result.append(m)
+                else:
+                    if m[0] == word[0]:
+                        result.append(m)
     return result
 
 with open('./data/targetdic.json','r') as f:
@@ -80,7 +82,7 @@ def get_lu_by_token(token):
     return result
 
 
-# In[106]:
+# In[10]:
 
 
 # input: text or json
@@ -103,10 +105,12 @@ def baseline(data):
 text = '애플은 스티브 잡스와 스티브 워즈니악과 론 웨인이 1976년에 설립한 컴퓨터 회사이다.'
 text = '헤밍웨이는 1961년 아이다호 주에서 62세의 나이에 자살했다.'
 text = '헤밍웨이는 풀린 파이퍼와 이혼한 뒤 마사 겔혼과 재혼하였다'
+text = '애플은 스티브 잡스와 스티브 워즈니악과 론 웨인이 1976년에 설립한 회사이다.'
+text = '1854년 노벨 문학상을 수상하였다'
 tl = text.split(' ')
 for t in tl:
     target = targetize(t)
     print(target)
-# input_data = dataio.preprocessor(text)
-# baseline(input_data)
+input_data = dataio.preprocessor(text)
+baseline(input_data)
 
