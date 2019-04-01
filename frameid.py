@@ -26,13 +26,13 @@ from src.fn_modeling import BertForFrameIdentification
 
 # # BASIC SETTINGS
 
-# In[1]:
+# In[6]:
 
 
 MAX_LEN = 256
 batch_size = 8
 language = 'ko'
-version = 1.0
+version = 1.1
 
 if language == 'en':
     framenet = 'fn'
@@ -53,19 +53,19 @@ print('\t# result will be saved to', result_dir)
 
 # # LOAD DATA
 
-# In[3]:
+# In[7]:
 
 
 from koreanframenet import koreanframenet
 if language == 'ko':
-    kfn = koreanframenet.interface(version)
+    kfn = koreanframenet.interface(version=version)
     trn, dev, tst = kfn.load_data()
     
 # print('\nan example of dataset')
 # print(trn[0])
 
 
-# In[4]:
+# In[8]:
 
 
 data_path = './koreanframenet/resource/info/'
@@ -332,25 +332,27 @@ def training():
         accuracy_result.append(acc)
         print("Accuracy: {}".format(accuracy_score(pred_tags, valid_tags)))
         
-        result_path = result_dir+'frameid-'+str(num_of_epoch)+'.tsv'
+        result_path = result_dir+str(version)+'.frameid-'+str(num_of_epoch)+'.tsv'
         with open(result_path,'w') as f:
             line = 'gold' + '\t' + 'prediction' + '\t' + 'score' + '\t' + 'input_lu' + '\t' + 'sense_candidates'
             f.write(line+'\n')
             for item in range(len(pred_tags)):
                 line = valid_tags[item] + '\t' + pred_tags[item] + '\t' + str(scores[item]) +'\t'+ all_lus[item]+'\t' + candis[item]
                 f.write(line+'\n')
-    accuracy_result_path = result_dir+'frameid.accuracy'
+    accuracy_result_path = result_dir+str(version)+'.frameid.accuracy'
     with open(accuracy_result_path,'w') as f:
         n = 0
         for acc in accuracy_result:
             f.write('epoch:'+str(n)+'\t' + 'accuracy: '+str(acc)+'\n')
             n +=1
 
-# training()
+training()
 
 
 # In[ ]:
 
+
+bert_io = dataio.for_BERT()
 
 def frame_identifier(bert_inputs):
     data_inputs, data_tgt_idx, data_lus, data_senses, data_masks = bert_inputs[0],bert_inputs[1],bert_inputs[2],bert_inputs[3],bert_inputs[4]
