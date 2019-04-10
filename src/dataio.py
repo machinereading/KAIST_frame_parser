@@ -1,5 +1,6 @@
 import torch
 import sys
+import glob
 import json
 sys.path.insert(0,'../')
 from src import models
@@ -14,6 +15,44 @@ dir_path = os.path.dirname( os.path.abspath( __file__ ))
 
 MAX_LEN = 256
 batch_size = 8
+
+def load_fn_data(fn_dir):
+    fnames = [f for f in glob.glob(fn_dir + "/*.conll")]
+    trn, dev, tst = [],[],[]
+    for fname in fnames:
+        with open(fname, 'r') as f:
+            lines = f.readlines()
+        tsv, sent = [],[]
+        for line in lines:
+            line = line.strip()
+            if line != '':
+                token = line.split('\t')
+                sent.append(token)
+            else:
+                tsv.append(sent)
+                sent = []
+        data = []
+        for sent in tsv:     
+            tok_str, tok_lu, tok_frame, tok_fe= [],[],[],[]
+            for token in sent:
+                tok_str.append(token[1])
+                tok_lu.append(token[12])
+                tok_frame.append(token[13])
+                tok_fe.append(token[14])
+            sent_list = []
+            sent_list.append(tok_str)
+            sent_list.append(tok_lu)
+            sent_list.append(tok_frame)
+            sent_list.append(tok_fe)
+            data.append(sent_list)
+        if 'train' in fname:
+            trn = data
+        elif 'dev' in fname:
+            dev = data
+        elif 'test' in fname:
+            tst = data
+    return trn, dev, tst
+        
 
 def get_masks(datas, mapdata, num_label=2):
     masks = []

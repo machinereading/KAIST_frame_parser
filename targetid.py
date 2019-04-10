@@ -26,7 +26,7 @@ from koreanframenet import koreanframenet
 kfn = koreanframenet.interface(version)
 
 
-# In[38]:
+# In[46]:
 
 
 from konlpy.tag import Kkma
@@ -59,7 +59,7 @@ def targetize(word):
             elif p == 'VCP' or p == 'EFN':
                 pos_list.append(m)
         for m, p in morps:
-            if p == 'NNG':
+            if p == 'NNG' or p == 'NNP':
                 if len(pos_list) == 0:
                     if m == word:
                         result.append(m)
@@ -85,7 +85,7 @@ def get_lu_by_token(token):
     return result
 
 
-# In[40]:
+# In[47]:
 
 
 # input: text or json
@@ -112,21 +112,17 @@ text = '애플은 스티브 잡스와 스티브 워즈니악과 론 웨인이 19
 text = '1854년 노벨 문학상을 수상하였다'
 text = '잡스는 미국에서 태어났다.'
 text = '헤밍웨이는 태어났고 마사 겔혼과 이혼하였다.'
+text = '헤밍웨이는 미국에서 태어났다.'
 
 
 tl = text.split(' ')
 for t in tl:
     target = targetize(t)
-    print(target)
+    morps = kkma.pos(t)
+    print('pos:',morps)
+    print('targets:',target)
 input_data = dataio.preprocessor(text)
 d = baseline(input_data)
 print('result')
 print(d)
-
-
-# In[24]:
-
-
-t = '재혼하'
-print(t[:-1])
 
