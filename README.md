@@ -14,6 +14,7 @@ It consists of two parsers. (1) SRL-based, and (2) BERT-based. Now (April, 2019)
 `git clone https://github.com/machinereading/KAIST_frame_parser.git`
 
 **Edit the `config.json` file**
+
 NOTICE: TRAINED MODEL IS NOT AVAILABLE YET
 
 ## Licenses
