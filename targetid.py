@@ -4,9 +4,10 @@
 # In[1]:
 
 
+import os
 import json
-from src import dataio
-from src import etri
+from KAIST_frame_parser.src import dataio
+from KAIST_frame_parser.src import etri
 from collections import Counter
 
 
@@ -22,7 +23,7 @@ version = 1.1
 # In[3]:
 
 
-from koreanframenet import koreanframenet
+from KAIST_frame_parser.koreanframenet import koreanframenet
 kfn = koreanframenet.interface(version)
 
 
@@ -68,7 +69,12 @@ def targetize(word):
                         result.append(m)
     return result
 
-with open('./data/targetdic-'+str(version)+'.json','r') as f:
+try:
+    target_dir = os.path.dirname( os.path.abspath( __file__ ))
+except:
+    target_dir = '.'
+
+with open(target_dir+'/data/targetdic-'+str(version)+'.json','r') as f:
     targetdic = json.load(f)
 def get_lu_by_token(token):
     target_candis = targetize(token)
@@ -85,7 +91,7 @@ def get_lu_by_token(token):
     return result
 
 
-# In[47]:
+# In[49]:
 
 
 # input: text or json
@@ -105,24 +111,25 @@ def baseline(data):
             result.append(instance)
     return result
         
-text = '애플은 스티브 잡스와 스티브 워즈니악과 론 웨인이 1976년에 설립한 컴퓨터 회사이다.'
-text = '헤밍웨이는 1961년 아이다호 주에서 62세의 나이에 자살했다.'
-text = '헤밍웨이는 풀린 파이퍼와 이혼한 뒤 마사 겔혼과 재혼하였다'
-text = '애플은 스티브 잡스와 스티브 워즈니악과 론 웨인이 1976년에 설립한 회사이다.'
-text = '1854년 노벨 문학상을 수상하였다'
-text = '잡스는 미국에서 태어났다.'
-text = '헤밍웨이는 태어났고 마사 겔혼과 이혼하였다.'
-text = '헤밍웨이는 미국에서 태어났다.'
+# text = '애플은 스티브 잡스와 스티브 워즈니악과 론 웨인이 1976년에 설립한 컴퓨터 회사이다.'
+# text = '헤밍웨이는 1961년 아이다호 주에서 62세의 나이에 자살했다.'
+# text = '헤밍웨이는 풀린 파이퍼와 이혼한 뒤 마사 겔혼과 재혼하였다'
+# text = '애플은 스티브 잡스와 스티브 워즈니악과 론 웨인이 1976년에 설립한 회사이다.'
+# text = '1854년 노벨 문학상을 수상하였다'
+# text = '잡스는 미국에서 태어났다.'
+# text = '헤밍웨이는 태어났고 마사 겔혼과 이혼하였다.'
+# text = '헤밍웨이는 미국에서 태어났다.'
+# text = '헤밍웨이는 풀린 파이퍼와 이혼한 뒤 마사 겔혼과 재혼하였다'
 
 
-tl = text.split(' ')
-for t in tl:
-    target = targetize(t)
-    morps = kkma.pos(t)
-    print('pos:',morps)
-    print('targets:',target)
-input_data = dataio.preprocessor(text)
-d = baseline(input_data)
-print('result')
-print(d)
+# tl = text.split(' ')
+# for t in tl:
+#     target = targetize(t)
+#     morps = kkma.pos(t)
+#     print('pos:',morps)
+#     print('targets:',target)
+# input_data = dataio.preprocessor(text)
+# d = baseline(input_data)
+# print('result')
+# print(d)
 

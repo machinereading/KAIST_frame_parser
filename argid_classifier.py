@@ -20,9 +20,9 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 n_gpu = torch.cuda.device_count()
 torch.cuda.get_device_name(0)
 
-from src import dataio
-from src.fn_modeling import BertForFrameIdentification
-from src.fn_modeling import BertForArgClassification
+from KAIST_frame_parser.src import dataio
+from KAIST_frame_parser.src.fn_modeling import BertForFrameIdentification
+from KAIST_frame_parser.src.fn_modeling import BertForArgClassification
 
 from datetime import datetime
 start_time = datetime.now()

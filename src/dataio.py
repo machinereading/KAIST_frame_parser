@@ -3,7 +3,8 @@ import sys
 import glob
 import json
 sys.path.insert(0,'../')
-from src import models
+# from src import models
+import models
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 from keras.preprocessing.sequence import pad_sequences
 from pytorch_pretrained_bert import BertTokenizer, BertConfig, BertModel

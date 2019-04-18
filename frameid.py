@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[7]:
 
 
 import torch
@@ -20,13 +20,13 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 n_gpu = torch.cuda.device_count()
 torch.cuda.get_device_name(0)
 
-from src import dataio
-from src.fn_modeling import BertForFrameIdentification
+from KAIST_frame_parser.src import dataio
+from KAIST_frame_parser.src.fn_modeling import BertForFrameIdentification
 
 
 # # BASIC SETTINGS
 
-# In[6]:
+# In[8]:
 
 
 MAX_LEN = 256
@@ -53,7 +53,7 @@ print('\t# result will be saved to', result_dir)
 
 # # LOAD DATA
 
-# In[7]:
+# In[9]:
 
 
 from koreanframenet import koreanframenet
@@ -65,7 +65,7 @@ if language == 'ko':
 # print(trn[0])
 
 
-# In[8]:
+# In[10]:
 
 
 data_path = './koreanframenet/resource/info/'
@@ -86,7 +86,7 @@ print('\t# of lu:', len(lu2idx))
 
 # # LOAD BERT TOKENIZER
 
-# In[5]:
+# In[11]:
 
 
 # load pretrained BERT tokenizer
@@ -108,7 +108,7 @@ def bert_tokenizer(text):
 
 # # GENERATE BERT input representations
 
-# In[6]:
+# In[12]:
 
 
 def gen_data(input_data):
@@ -177,7 +177,22 @@ dev_inputs, dev_tgt_idxs, dev_lus, dev_senses, dev_masks = gen_data(dev)
 tst_inputs, tst_tgt_idxs, tst_lus, tst_senses, tst_masks = gen_data(tst)
 
 
-# In[7]:
+# In[15]:
+
+
+print(trn[0])
+print('')
+print(trn_inputs[0])
+print('')
+print(trn_tgt_idxs[0])
+print('')
+print(trn_lus[0])
+print('')
+print(trn_senses[0])
+print('')
+
+
+# In[ ]:
 
 
 trn_data = TensorDataset(trn_inputs, trn_tgt_idxs, trn_lus, trn_senses, trn_masks)
@@ -195,7 +210,7 @@ tst_dataloader = DataLoader(tst_data, sampler=tst_sampler, batch_size=batch_size
 
 # # LOAD BERT framenet model
 
-# In[8]:
+# In[ ]:
 
 
 model = BertForFrameIdentification.from_pretrained("bert-base-multilingual-cased", num_labels = len(sense2idx), num_lus = len(lu2idx), ludim = 64, lusensemap=lusensemap)
@@ -222,7 +237,7 @@ else:
 optimizer = Adam(optimizer_grouped_parameters, lr=3e-5)
 
 
-# In[9]:
+# In[ ]:
 
 
 # Evaluation

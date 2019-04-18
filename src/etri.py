@@ -3,10 +3,7 @@
 
 # # This is a IO adapter for ETRI NLP service
 
-# SETTINGS
-etri_rest_url = 'http://143.248.135.20:31235/etri_parser'
-etri_socket_url = '143.248.135.60'
-etri_socket_port = 33222
+
 
 # service = 'REST'
 serviceType = 'SOCKET'
@@ -20,7 +17,7 @@ import socket
 import struct
 
 class etri():
-    def __init__(self, serviceType, url, port=33222):
+    def __init__(self, serviceType=None, url=None, port=33222):
         
         if serviceType == 'REST':
             self.etri_url = url
@@ -165,9 +162,9 @@ class etri():
             for i in nlp[0]['dependency']:
                 tid = i['id']
                 token = i['text']
-                third = getMorhWithWord(tid, nlp)
+                third = etri.getMorhWithWord(self, tid, nlp)
                 plemma = token
-                pos = getMorpEval(tid, nlp)
+                pos = etri.getMorpEval(self, tid, nlp)
                 ppos = pos
                 feat = '_'
                 pfeat = '_'
@@ -388,11 +385,11 @@ class etri():
 
     def get_args(self, verb_id, verb_type, nlp, conll):
         arguments = []
-        arg_ids = get_arg_ids(verb_id, verb_type, nlp)
+        arg_ids = etri.get_arg_ids(self, verb_id, verb_type, nlp)
         sent_lenth = len(nlp[0]['dependency'])
         for arg_item in arg_ids:
             tokens = arg_item['tokens']
-            arg_text = get_arg_text(tokens, conll)
+            arg_text = etri.get_arg_text(self, tokens, conll)
             arg = {}
             arg['text'] = arg_text
             arg['tokens'] = tokens
@@ -406,7 +403,7 @@ class etri():
             span['end'] = end        
             arg['span'] = span
 
-            josa = get_josa(conll, end-1)
+            josa = etri.get_josa(self, conll, end-1)
             arg['josa'] = josa
             arguments.append(arg)
         return arguments
@@ -421,14 +418,14 @@ class etri():
         conll = conll_2009
         result = []
         if conll:
-            verb_ids = get_verb_ids(conll)
+            verb_ids = etri.get_verb_ids(self, conll)
             for verb_id, verb, verb_type in verb_ids:
                 d = {}
                 pred = {}
                 pred['text'] = verb
                 pred['id'] = verb_id
                 d['predicate'] = pred
-                arguments = get_args(verb_id, verb_type, nlp, conll)
+                arguments = etri.get_args(self, verb_id, verb_type, nlp, conll)
                 d['arguments'] = arguments
                 result.append(d)
         else:
