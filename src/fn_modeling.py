@@ -63,3 +63,51 @@ class BertForFrameIdentification(BertPreTrainedModel):
             return loss
         else:
             return logits
+        
+        
+class BertForArgClassification(BertPreTrainedModel):
+    def __init__(self, config, num_labels=2, num_lus=2, num_frames=2, ludim=64, framedim=100, frargmap=None):
+        super(BertForArgClassification, self).__init__(config)
+        self.num_labels = num_labels # total number of all FEs
+        self.lu_embeddings = nn.Embedding(num_lus, ludim) # embeddings for lexical unit. (e.g. eat.v)
+        self.frame_embeddings = nn.Embedding(num_frames, framedim) # embeddings for frame (e.g. Ingesting)
+        self.bert = BertModel(config)
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        self.classifier = nn.Linear(config.hidden_size+config.hidden_size+ludim+framedim, num_labels)
+        self.apply(self.init_bert_weights)
+        self.frargmap = frargmap # mapping table for lu to its sense candidates
+
+    def forward(self, input_ids, token_type_ids=None, attention_mask=None, tgt_idxs=0, lus=None, frames=None, arg_idxs=None, args=None):
+        sequence_output, _ = self.bert(input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False)        
+        sequence_output = self.dropout(sequence_output)
+        
+        # target and arg vector
+        tgt_vec, arg_vec = [],[]
+        for i in range(len(sequence_output)):
+            tgt_vec.append(sequence_output[i][tgt_idxs[i]])
+            arg_vec.append(sequence_output[i][arg_idxs[i]])
+        tgt_vec = torch.stack(tgt_vec)
+        arg_vec = torch.stack(arg_vec)
+        # LU vector
+        lu_vec = self.lu_embeddings(lus)
+        #frame vector
+        frame_vec = self.frame_embeddings(frames)
+        # arg_embs
+        arg_embs = torch.cat((arg_vec, tgt_vec, lu_vec, frame_vec), -1)
+        
+        logits = self.classifier(arg_embs)
+        masks = dataio.get_masks(frames, self.frargmap, num_label=self.num_labels).to(device)
+        
+        total_loss = 0
+        if args is not None:
+            for i in range(len(logits)):
+                logit = logits[i]
+                mask = masks[i]
+                arg = args[i]
+                loss_fct = CrossEntropyLoss(weight = mask)
+                loss_per_seq = loss_fct(logit.view(-1, self.num_labels), arg.view(-1))
+                total_loss += loss_per_seq
+            loss = total_loss / len(logits)
+            return loss
+        else:
+            return logits
