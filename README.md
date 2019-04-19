@@ -1,8 +1,11 @@
 # KAIST_frame_parser
+** April, 2019 **
+KAIST_frame_parser is available for [Korean FrameNet](https://github.com/machinereading/koreanframenet).
+KAIST_frame_parser consists of two parsers. (1) SRL-based, and (2) BERT-based. Now only SRL-based is available.
 
 ## About
-KAIST_frame_parser is based on the [Korean FrameNet](https://github.com/machinereading/koreanframenet).
-It consists of two parsers. (1) SRL-based, and (2) BERT-based. Now (April, 2019) only SRL-based is available.
+KAIST-frame-parser is a semantic parser to understand the meaning of texts in terms of [FrameNet](https://framenet.icsi.berkeley.edu/fndrupal/). 
+
 
 ## prerequisite
 * `python 3`
