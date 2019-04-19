@@ -59,7 +59,7 @@ parsed = parser.parser(text, sentence_id=sentence_id)
 
 **result**
 
-The result consits of following three parts: (1) conll format, (2) triple format, and (3) [pubannotation format](https://textae.pubannotation.org/). 
+The result consits of following three parts: (1) triple format, (2) conll format,  and (3) [pubannotation format](https://textae.pubannotation.org/). 
 
 * (1) triple format (`parsed['graph']`)
 ```
