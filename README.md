@@ -28,9 +28,11 @@ git clone https://github.com/machinereading/koreanframenet.git
 
 ### (1) How to use SRL-based frame parser
 **prerequisite**
+
 SRL-based frame parser requires NLP modules as a preprocessing. In this library, we use wiseNLU(http://aiopen.etri.re.kr/guide_wiseNLU.php). Please get API code and edit the config file first. 
 
 **Download the pretrained model**
+
 Download two pretrained model files to `{your_model_dir}`. Do not change the model file names.
 * kfn11-frameid.pt ([link])
 * kfn1.1-arg_classifier.pt ([link])
@@ -50,7 +52,9 @@ text = '헤밍웨이는 1899년 7월 21일 미국 일리노이에서 태어났�
 sentence_id = 'input_sentence' # (optional) you can assign the input text to its ID. 
 parsed = parser.parser(text, sentence_id=sentence_id)
 ```
+
 **result**
+
 The result consits of following three parts: (1) conll format, (2) triple format, and (3) [pubannotation format](https://textae.pubannotation.org/). 
 
 * (1) triple format (`parsed['graph']`)
