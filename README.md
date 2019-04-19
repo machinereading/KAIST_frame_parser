@@ -6,12 +6,25 @@ It consists of two parsers. (1) SRL-based, and (2) BERT-based. Now (April, 2019)
 
 ## prerequisite
 * `python 3`
-* `Korean FrameNet` [link](https://github.com/machinereading/koreanframenet)
+* `pytorch-pretrained-BERT` [Link](https://github.com/huggingface/pytorch-pretrained-BERT)
+* `Korean FrameNet` [Link](https://github.com/machinereading/koreanframenet)
 
 ## How to use
 **Install**
 
-`git clone https://github.com/machinereading/KAIST_frame_parser.git`
+First, install `pytorch-pretrained-BERT`.
+```
+pip3 install pytorch-pretrained-bert
+```
+Second, install KAIST_frame_parser at your workspace directory.
+```
+git clone https://github.com/machinereading/KAIST_frame_parser.git
+```
+Finally, install Korean FrameNet at the KAIST_frame_parser directory.
+```
+cd ./KAIST_frame_parser
+git clone https://github.com/machinereading/koreanframenet.git
+```
 
 **Edit the `config.json` file**
 
