@@ -59,7 +59,7 @@ The result consits of following three parts: (1) conll format, (2) triple format
 
 * (1) triple format (`parsed['graph']`)
 ```
-\[
+[
     ('input_sentence', 'nif:isString', '헤밍웨이는 1899년 7월 21일 미국 일리노이에서 태어났고, 62세에 자살로 사망했다.'),
     ('frame:Origin', 'frdf:provinence', 'input_sentence'),
     ('frame:Origin', 'frdf:lu', '미국.n'),
@@ -79,7 +79,7 @@ The result consits of following three parts: (1) conll format, (2) triple format
     ('frame:Death', 'arg:Protagonist', '헤밍웨이는'),
     ('frame:Death', 'arg:Time', '62세에'),
     ('frame:Death', 'arg:Manner', '자살로')
-\]
+]
 ```
 * (2) conll format (`parsed['conll']`)
 The result is a list of (multiple) FrameNet annotations for a given sentence. 
