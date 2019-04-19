@@ -38,8 +38,8 @@ SRL-based frame parser is working only for Korean. It requires NLP modules as a 
 **Download the pretrained model**
 
 Download two pretrained model files to `{your_model_dir}` (e.g. `/home/models`). Do not change the model file names.
-* kfn11-frameid.pt ([download](https://drive.google.com/open?id=1fgmUU9trekwP-fBc7pz62n0lgJH9P4eJ))
-* kfn1.1-arg_classifier.pt ([download](https://drive.google.com/open?id=1jZEvrmQEvRwDDS3wDZ4pqHbyhqoJ99Wy))
+* **kfn11-frameid.pt** ([download](https://drive.google.com/open?id=1fgmUU9trekwP-fBc7pz62n0lgJH9P4eJ))
+* **kfn1.1-arg_classifier.pt** ([download](https://drive.google.com/open?id=1jZEvrmQEvRwDDS3wDZ4pqHbyhqoJ99Wy))
 
 **Import srl_based_parser (in your python code)**
 ```
