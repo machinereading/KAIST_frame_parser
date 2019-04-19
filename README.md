@@ -37,7 +37,7 @@ Download two pretrained model files to `{your_model_dir}`. Do not change the mod
 * kfn11-frameid.pt ([link])
 * kfn1.1-arg_classifier.pt ([link])
 
-**Import srl_based_parser (in your python code)
+**Import srl_based_parser (in your python code)**
 ```
 from KAIST_frame_parser import srl_based_parser
 language = 'ko' # default
