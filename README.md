@@ -33,7 +33,7 @@ git clone https://github.com/machinereading/koreanframenet.git
 ### (1) How to use SRL-based frame parser
 **prerequisite**
 
-SRL-based frame parser requires NLP modules as a preprocessing. In this library, we use wiseNLU(http://aiopen.etri.re.kr/guide_wiseNLU.php). Please get API code and edit the config file first. 
+SRL-based frame parser is working only for Korean. It requires NLP modules as a preprocessing. In this library, we use Korean NLP service [wiseNLU](http://aiopen.etri.re.kr/guide_wiseNLU.php). Please get API code and edit the config file first. 
 
 **Download the pretrained model**
 
