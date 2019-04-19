@@ -1,13 +1,15 @@
 
 # coding: utf-8
 
-# In[2]:
+# In[1]:
 
 
 import json
 import sys
-from src import dataio, etri
-import targetid
+sys.path.append('../')
+
+from KAIST_frame_parser.src import dataio, etri
+from KAIST_frame_parser.src import targetid
 import torch
 from torch import nn
 import os
@@ -15,7 +17,7 @@ from torch.utils.data import TensorDataset, DataLoader, RandomSampler, Sequentia
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 n_gpu = torch.cuda.device_count()
 
-from koreanframenet.src import conll2textae
+from KAIST_frame_parser.koreanframenet.src import conll2textae
 
 from konlpy.tag import Kkma
 from pprint import pprint
@@ -24,48 +26,44 @@ from pprint import pprint
 # In[2]:
 
 
-try:
-    config_dir = os.path.dirname( os.path.abspath( __file__ ))
-except:
-    config_dir = '.'
-    
-config_file = config_dir+'/config.json'
-
-with open(config_file, 'r') as f:
-    config = json.load(f)
-
-framenet = config['framenet']
-version = float(framenet.split('fn')[-1])
-model_dir = config['model_dir']
-frameid_model_path = model_dir+'frameid-'+str(version)+'.pt'
-arg_classifier_model_path = model_dir+'arg_classifier-'+str(version)+'.pt'
-
-data_path = config_dir+'/koreanframenet/resource/info/'
-
-with open(data_path+framenet+'_lu2idx.json','r') as f:
-    lu2idx = json.load(f)
-with open(data_path+'fn1.7_frame2idx.json','r') as f:
-    frame2idx = json.load(f)
-with open(data_path+'fn1.7_fe2idx.json','r') as f:
-    arg2idx = json.load(f)
-with open(data_path+framenet+'_lufrmap.json','r') as f:
-    lufrmap = json.load(f)
-    
-idx2frame = dict(zip(frame2idx.values(),frame2idx.keys()))
-idx2lu = dict(zip(lu2idx.values(),lu2idx.keys()))
-idx2arg = dict(zip(arg2idx.values(),arg2idx.keys()))
-
-
-# In[3]:
-
-
 class models():
-    def __init__(self, mode='parser', version=1.1):
+    def __init__(self, mode='parser', version=1.1, language='ko', model_dir=False):
         self.version = version
         self.mode = mode
+        if language == 'en':
+            self.framenet = 'fn'+str(version)
+        elif language == 'ko':
+            self.framenet = 'kfn'+str(version)
+            
+        if model_dir.endswith('/'):
+            pass
+        else:
+            model_dir += '/'
+        self.frameid_model_path = model_dir+self.framenet+'-frameid.pt'
+        self.arg_classifier_model_path = model_dir+self.framenet+'-arg_classifier.pt'
+        
         self.bert_io = dataio.for_BERT(mode=self.mode, version=self.version)
-        self.frameid_model = torch.load(frameid_model_path)
-        self.arg_classifier_model = torch.load(arg_classifier_model_path)
+        self.frameid_model = torch.load(self.frameid_model_path)
+        self.arg_classifier_model = torch.load(self.arg_classifier_model_path)
+        
+        
+        
+        try:
+            target_dir = os.path.dirname(os.path.abspath( __file__ ))
+        except:
+            target_dir = '.'
+        data_path = target_dir+'/koreanframenet/resource/info/'
+        with open(data_path+self.framenet+'_lu2idx.json','r') as f:
+            self.lu2idx = json.load(f)
+        with open(data_path+'fn1.7_frame2idx.json','r') as f:
+            self.frame2idx = json.load(f)      
+        with open(data_path+self.framenet+'_lufrmap.json','r') as f:
+            self.lufrmap = json.load(f)
+        with open(data_path+'fn1.7_fe2idx.json','r') as f:
+            self.arg2idx = json.load(f)
+        self.idx2frame = dict(zip(self.frame2idx.values(),self.frame2idx.keys()))
+        self.idx2lu = dict(zip(self.lu2idx.values(),self.lu2idx.keys()))
+        self.idx2arg = dict(zip(self.arg2idx.values(),self.arg2idx.keys()))
         
     def frame_identifier(self, tgt_data):
         bert_inputs = self.bert_io.convert_to_bert_input_frameid(tgt_data)
@@ -82,8 +80,8 @@ class models():
             masks = self.bert_io.get_masks(b_lus, model='frameid').to(device)
             
             for lu in b_lus:
-                candi_idx = lufrmap[str(int(lu))]
-                candi = [idx2frame[c] for c in candi_idx]
+                candi_idx = self.lufrmap[str(int(lu))]
+                candi = [self.idx2frame[c] for c in candi_idx]
                 candi_txt = ','.join(candi)
                 candi_txt = str(len(candi))+'\t'+candi_txt
                 candis.append(candi_txt)
@@ -167,11 +165,11 @@ class models():
         return result
 
 
-# In[4]:
+# In[3]:
 
 
 class SRLbasedParser():
-    def __init__(self):
+    def __init__(self, version=1.1, language='ko', model_dir=False):
         try:
             config_dir = os.path.dirname( os.path.abspath( __file__ ))
         except:
@@ -179,24 +177,21 @@ class SRLbasedParser():
         config_file = config_dir+'/config.json'
         with open(config_file, 'r') as f:
             config = json.load(f)
-        self.framenet = config['framenet']
-        self.version = float(self.framenet.split('fn')[-1])
-        
-        model_dir = config['model_dir']
-        self.frameid_model_path = model_dir+'frameid-'+str(self.version)+'.pt'
-        self.arg_classifier_model_path = model_dir+'arg_classifier-'+str(self.version)+'.pt'
-        
+            
+        self.version=version
+        self.language=language
+        self.model_dir=model_dir
+                
         self.nlp_service = etri.etri(serviceType=config['nlp']['serviceType'], url=config['nlp']['url'], port=config['nlp']['port'])     
-        
-        self.fn_models = models(mode='parser', version=self.version)
+        self.fn_models = models(mode='parser', version=self.version, language=self.language, model_dir=self.model_dir)
         self.kkma = Kkma()
 
         print('### SETTINGS')
-        print('\t# FrameNet:', framenet)
+        print('\t# FrameNet:', self.fn_models.framenet)
         print('\t# PARSER:', config['parser'])
         print('\t# MODEL_PATH:', model_dir)
-        print('\t# (your frameid model should be:', self.frameid_model_path)
-        print('\t# (your argid model should be:', self.arg_classifier_model_path)
+        print('\t# (your frameid model should be:', self.fn_models.frameid_model_path)
+        print('\t# (your argid model should be:', self.fn_models.arg_classifier_model_path)
         
     def doc2sents(self, text):
         result = []
@@ -290,10 +285,10 @@ class SRLbasedParser():
         text = data
 
         tgt_data = targetid.baseline(input_data)
-        fid_data, fid_result  = self.fn_models.frame_identifier(tgt_data)
-        argid_data = SRLbasedParser.arg_identifier(self, fid_data)   
+        fid_data, fid_result  = self.fn_models.frame_identifier(tgt_data)        
+        argid_data = SRLbasedParser.arg_identifier(self, fid_data)
 
-        framegraph = SRLbasedParser.result2triples(self, text, argid_data, fid_result, sentence_id)
+        framegraph = SRLbasedParser.result2triples(self, text, argid_data, fid_result, str(sentence_id))
         textae = conll2textae.get_textae(argid_data)
 
         result = {}
@@ -303,17 +298,26 @@ class SRLbasedParser():
         return result    
 
 
-# In[5]:
+# In[4]:
 
 
-# parser = SRLbasedParser()
+def load_parser():
+    language = 'ko'
+    version = 1.1
+    model_dir = '/disk_4/resource/models/'
+    parser = SRLbasedParser(language='ko', version=version, model_dir=model_dir)
+    return parser
 
 
-# In[6]:
+# In[7]:
 
 
-# text = '헤밍웨이는 1899년 7월 21일 미국 일리노이에서 태어났고, 62세에 자살로 사망했다.'
-# stringuri = 'test:offset_0_53'
-# parsed = parser.parser(text, stringuri)
-# pprint(parsed['graph'])
+def test():
+    parser = load_parser()
+    text = '헤밍웨이는 1899년 7월 21일 미국 일리노이에서 태어났고, 62세에 자살로 사망했다.'
+    stringuri = 'test:offset_0_53'
+    parsed = parser.parser(text, sentence_id=stringuri)
+    pprint(parsed['graph'])
+    
+# test()
 

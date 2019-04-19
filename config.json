@@ -4,7 +4,5 @@
         "serviceType": "SOCKET",
         "url": "143.248.135.60",
         "port": 33222
-    },
-    "framenet": "kfn1.1",
-    "model_dir": "/disk_4/resource/models/kfn/"
+    }
 }

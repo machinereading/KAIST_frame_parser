@@ -74,7 +74,7 @@ try:
 except:
     target_dir = '.'
 
-with open(target_dir+'/data/targetdic-'+str(version)+'.json','r') as f:
+with open(target_dir+'/../data/targetdic-'+str(version)+'.json','r') as f:
     targetdic = json.load(f)
 def get_lu_by_token(token):
     target_candis = targetize(token)
