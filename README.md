@@ -1,5 +1,5 @@
 # KAIST_frame_parser
-**\*\*\*\*\* April, 2019 Update \*\*\*\*\***
+**\*\*\*\*\* \[Update\] April, 2019  \*\*\*\*\***
 
 KAIST_frame_parser is available for [Korean FrameNet](https://github.com/machinereading/koreanframenet).
 KAIST_frame_parser consists of two parsers. (1) SRL-based, and (2) BERT-based. Now only SRL-based is available.
