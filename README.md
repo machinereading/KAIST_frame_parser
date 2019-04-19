@@ -40,8 +40,8 @@ Download two pretrained model files to `{your_model_dir}`. Do not change the mod
 **Import srl_based_parser (in your python code)**
 ```
 from KAIST_frame_parser import srl_based_parser
-language = 'ko' _# default_
-version = 1.1 _# default_
+language = 'ko' # default
+version = 1.1 # default
 model_dir = {your_model_dir}
 parser = srl_based_parser.SRLbasedParser(language=language, version=version, model_dir=model_dir)
 ```
@@ -49,7 +49,7 @@ parser = srl_based_parser.SRLbasedParser(language=language, version=version, mod
 **parse the input text**
 ```
 text = '헤밍웨이는 1899년 7월 21일 미국 일리노이에서 태어났고, 62세에 자살로 사망했다.'
-sentence_id = 'input_sentence' _# (optional) you can assign the input text to its ID._
+sentence_id = 'input_sentence' # (optional) you can assign the input text to its ID.
 parsed = parser.parser(text, sentence_id=sentence_id)
 ```
 
