@@ -36,16 +36,16 @@ SRL-based frame parser requires NLP modules as a preprocessing. In this library,
 
 **Download the pretrained model**
 
-Download two pretrained model files to `{your_model_dir}`. Do not change the model file names.
-* kfn11-frameid.pt ([link])
-* kfn1.1-arg_classifier.pt ([link])
+Download two pretrained model files to `{your_model_dir}` (e.g. `/home/models`). Do not change the model file names.
+* kfn11-frameid.pt ([download](https://drive.google.com/open?id=1fgmUU9trekwP-fBc7pz62n0lgJH9P4eJ)
+* kfn1.1-arg_classifier.pt ([download](https://drive.google.com/open?id=1jZEvrmQEvRwDDS3wDZ4pqHbyhqoJ99Wy))
 
 **Import srl_based_parser (in your python code)**
 ```
 from KAIST_frame_parser import srl_based_parser
 language = 'ko' # default
 version = 1.1 # default
-model_dir = {your_model_dir}
+model_dir = {your_model_dir} # absolute_path
 parser = srl_based_parser.SRLbasedParser(language=language, version=version, model_dir=model_dir)
 ```
 
