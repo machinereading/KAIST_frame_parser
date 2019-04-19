@@ -46,7 +46,7 @@ Download two pretrained model files to `{your_model_dir}` (e.g. `/home/models`).
 from KAIST_frame_parser import srl_based_parser
 language = 'ko' # default
 version = 1.1 # default
-model_dir = {your_model_dir} # absolute_path
+model_dir = {your_model_dir} # absolute_path (e.g. /home/models)
 parser = srl_based_parser.SRLbasedParser(language=language, version=version, model_dir=model_dir)
 ```
 
