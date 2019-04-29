@@ -3,6 +3,7 @@ import sys
 import glob
 import json
 sys.path.insert(0,'../')
+sys.path.insert(0,'../../')
 # from src import models
 import models
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler

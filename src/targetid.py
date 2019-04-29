@@ -46,10 +46,10 @@ def targetize(word):
         for i in range(len(morps)):
             m,p = morps[i]
             if p == 'VA' or 'VV':
-                if m[0] == word[0] and len(m) > 1:
+                if m[0] == word[0] and len(m) >= 1:
                     result.append(m)
             if i > 0 and p == 'XSV':
-                if m[0] == word[0] and len(m) > 1:
+                if m[0] == word[0] and len(m) >= 1:
                     result.append(m)
                 r = morps[i-1][0]+m
                 if r[0] == word[0]:
