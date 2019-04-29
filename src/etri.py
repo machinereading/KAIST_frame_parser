@@ -217,13 +217,12 @@ class etri():
                     arg_id = int(token.split('@')[0].split('#')[1])
                     arg_type = token.split('@')[0].split('#')[0]
                     arg_label = token.split('@')[1][:3]
+                    dp_label = phrase_dp[arg_id]['label']
                     if arg_type != 'S':
-                        dp_label = phrase_dp[arg_id]['label']
                         seperate = False
                         arg = (arg_id, dp_label, seperate)
                         arg_ids.append(arg)
                     elif arg_label == 'CMP':
-                        dp_label = phrase_dp[arg_id]['label']
                         if 'SBJ' in phrase_dp[verb_phrase_id]['text']:
                             seperate = False
                             arg = (arg_id, dp_label, seperate)

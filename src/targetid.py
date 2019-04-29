@@ -9,6 +9,7 @@ import json
 from KAIST_frame_parser.src import dataio
 from KAIST_frame_parser.src import etri
 from collections import Counter
+import jpype
 
 
 # # Basic settings
@@ -33,6 +34,7 @@ kfn = koreanframenet.interface(version)
 from konlpy.tag import Kkma
 kkma = Kkma()
 def targetize(word):
+    jpype.attachThreadToJVM()
     result = []
     morps = kkma.pos(word)
     v = False
