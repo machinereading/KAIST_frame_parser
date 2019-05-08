@@ -43,8 +43,8 @@ class models():
         self.arg_classifier_model_path = model_dir+self.framenet+'-arg_classifier.pt'
         
         self.bert_io = dataio.for_BERT(mode=self.mode, version=self.version)
-        self.frameid_model = torch.load(self.frameid_model_path)
-        self.arg_classifier_model = torch.load(self.arg_classifier_model_path)
+        self.frameid_model = torch.load(self.frameid_model_path, map_location=device)
+        self.arg_classifier_model = torch.load(self.arg_classifier_model_path, map_location=device)
         
         
         
