@@ -25,7 +25,7 @@ from torch.nn.parameter import Parameter
 from pytorch_pretrained_bert.modeling import *
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 n_gpu = torch.cuda.device_count()
-torch.cuda.get_device_name(0)
+# torch.cuda.get_device_name(0)
 
 def add_vocab_to_model(model, added_vocab=False):
     if added_vocab == False:
