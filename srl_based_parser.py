@@ -141,7 +141,7 @@ class models():
                 logits = self.arg_classifier_model(b_input_ids, token_type_ids=None, tgt_idxs=b_tgt_idxs, 
                          lus=b_lus, frames=b_frames, arg_idxs=b_arg_idxs, attention_mask=b_masks)
             logits = logits.detach().cpu().numpy()      
-            masks = self.bert_io.get_masks(b_frames, model='argid').to(device)
+            masks = self.bert_io.get_masks(b_frames, model='argclassification').to(device)
             
             for b_idx in range(len(logits)):
                 logit = logits[b_idx]
@@ -160,7 +160,7 @@ class models():
                 predictions.append([int(prediction)])
                 score = float(score)
                 scores.append(score)
-            pred_tags = self.bert_io.idx2tag(predictions, model='argid')
+            pred_tags = self.bert_io.idx2tag(predictions, model='argclassification')
             result.append(pred_tags)
         return result
 
@@ -285,8 +285,11 @@ class SRLbasedParser():
         text = data
 
         tgt_data = targetid.baseline(input_data)
-        fid_data, fid_result  = self.fn_models.frame_identifier(tgt_data)        
-        argid_data = SRLbasedParser.arg_identifier(self, fid_data)
+        fid_data, fid_result  = self.fn_models.frame_identifier(tgt_data)
+        if len(fid_data) > 0:
+            argid_data = SRLbasedParser.arg_identifier(self, fid_data)
+        else:
+            argid_data = []
 
         framegraph = SRLbasedParser.result2triples(self, text, argid_data, fid_result, str(sentence_id))
         textae = conll2textae.get_textae(argid_data)
@@ -309,15 +312,25 @@ def load_parser():
     return parser
 
 
-# In[7]:
+# In[9]:
 
 
 def test():
     parser = load_parser()
     text = '헤밍웨이는 1899년 7월 21일 미국 일리노이에서 태어났고, 62세에 자살로 사망했다.'
+    text = '나는 밥을 먹었다.'
     stringuri = 'test:offset_0_53'
     parsed = parser.parser(text, sentence_id=stringuri)
     pprint(parsed['graph'])
     
 # test()
+
+
+# In[6]:
+
+
+# word = '나는 밥을 먹었다'
+# kkma = Kkma()
+# morps = kkma.pos(word)
+# print(morps)
 

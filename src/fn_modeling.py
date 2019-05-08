@@ -27,6 +27,28 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 n_gpu = torch.cuda.device_count()
 torch.cuda.get_device_name(0)
 
+def add_vocab_to_model(model, added_vocab=False):
+    if added_vocab == False:
+        added_vocab = ['<tgt>', '</tgt>']
+    ori_vocab_size = model.config.vocab_size
+    vocab_size = ori_vocab_size + len(added_vocab)
+    model.config.vocab_size = vocab_size
+    ori_embedding = model.embeddings.word_embeddings
+    new_embedding = ori_embedding
+    new_embedding.num_embeddings = vocab_size
+    new_weight = []
+    for w in torch.tensor(ori_embedding.weight):
+        new_weight.append(w)
+    for i in range(len(added_vocab)):
+        init_weight = torch.randn(768)
+        new_weight.append(init_weight)
+    new_weight_tensor = torch.stack(new_weight)
+    new_weight_param = Parameter(new_weight_tensor)
+
+    new_embedding.weight = new_weight_param
+    model.embeddings.word_embeddings = new_embedding
+    return model
+
 class BertForFrameIdentification(BertPreTrainedModel):
     def __init__(self, config, num_labels=2, num_lus=2, ludim=64, lufrmap=None):
         super(BertForFrameIdentification, self).__init__(config)
@@ -65,6 +87,35 @@ class BertForFrameIdentification(BertPreTrainedModel):
         else:
             return logits
         
+class BertForFrameId(BertPreTrainedModel):
+    def __init__(self, config, num_labels=2, lufrmap=None):
+        super(BertForFrameId, self).__init__(config)
+        self.num_labels = num_labels # total number of all senses
+        self.bert = BertModel(config)
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        self.classifier = nn.Linear(config.hidden_size, num_labels)
+        self.apply(self.init_bert_weights)
+        self.lufrmap = lufrmap # mapping table for lu to its sense candidates    
+
+    def forward(self, input_ids, token_type_ids=None, attention_mask=None, lus=None, frames=None,):
+        _, pooled_output = self.bert(input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False)        
+        pooled_output = self.dropout(pooled_output)
+        logits = self.classifier(pooled_output)
+        masks = dataio.get_masks(lus, self.lufrmap, num_label=self.num_labels).to(device)
+        
+        total_loss = 0
+        if frames is not None:
+            for i in range(len(logits)):
+                logit = logits[i]
+                mask = masks[i]
+                frame = frames[i]
+                loss_fct = CrossEntropyLoss(weight = mask)
+                loss_per_seq = loss_fct(logit.view(-1, self.num_labels), frame.view(-1))
+                total_loss += loss_per_seq
+            loss = total_loss / len(logits)
+            return loss
+        else:
+            return logits        
         
 class BertForArgClassification(BertPreTrainedModel):
     def __init__(self, config, num_labels=2, num_lus=2, num_frames=2, ludim=64, framedim=100, frargmap=None):

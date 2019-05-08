@@ -1,0 +1,26 @@
+Using TensorFlow backend.
+Better speed can be achieved with apex installed from https://www.github.com/nvidia/apex.
+### Korean FrameNet ###
+	# contact: hahmyg@kaist, hahmyg@gmail.com #
+
+
+### loading Korean FrameNet 1.0 data...
+	# of instances in training data: 12431
+	# of instances in dev data: 624
+	# of instances in test data: 4382
+12431
+624
+4382
+your model would be saved at /disk_4/resource/models/kfn1.0/
+Epoch:   0%|                                                                                        | 0/5 [00:00<?, ?it/s]Train loss: 5.673889205262467
+Epoch:  20%|███████████████▊                                                               | 1/5 [11:40<46:43, 700.75s/it]Train loss: 4.202141558370305
+Epoch:  40%|███████████████████████████████▌                                               | 2/5 [23:29<35:13, 704.62s/it]Train loss: 2.9524368399531227
+Epoch:  60%|███████████████████████████████████████████████▍                               | 3/5 [35:18<23:32, 706.21s/it]Train loss: 2.2509843254152644
+Epoch:  80%|███████████████████████████████████████████████████████████████▏               | 4/5 [47:09<11:47, 707.47s/it]Train loss: 1.8000953560497281
+Epoch: 100%|███████████████████████████████████████████████████████████████████████████████| 5/5 [59:02<00:00, 708.52s/it]
+...training is done
+model: /disk_4/resource/models/kfn1.0/epoch-3-frameid.pt
+frameid_tgt.py:424: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
+  b_pred_logits = sm(b_pred_logits).view(1, -1)
+Accuracy: 0.8089913281606572
+result is written to /disk_4/resource/models/kfn1.0/result.txt
