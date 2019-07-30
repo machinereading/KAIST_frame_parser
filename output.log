@@ -1,26 +1,100 @@
-Using TensorFlow backend.
 Better speed can be achieved with apex installed from https://www.github.com/nvidia/apex.
 ### Korean FrameNet ###
 	# contact: hahmyg@kaist, hahmyg@gmail.com #
 
 
-### loading Korean FrameNet 1.0 data...
-	# of instances in training data: 12431
-	# of instances in dev data: 624
-	# of instances in test data: 4382
-12431
-624
-4382
-your model would be saved at /disk_4/resource/models/kfn1.0/
-Epoch:   0%|                                                                                        | 0/5 [00:00<?, ?it/s]Train loss: 5.673889205262467
-Epoch:  20%|███████████████▊                                                               | 1/5 [11:40<46:43, 700.75s/it]Train loss: 4.202141558370305
-Epoch:  40%|███████████████████████████████▌                                               | 2/5 [23:29<35:13, 704.62s/it]Train loss: 2.9524368399531227
-Epoch:  60%|███████████████████████████████████████████████▍                               | 3/5 [35:18<23:32, 706.21s/it]Train loss: 2.2509843254152644
-Epoch:  80%|███████████████████████████████████████████████████████████████▏               | 4/5 [47:09<11:47, 707.47s/it]Train loss: 1.8000953560497281
-Epoch: 100%|███████████████████████████████████████████████████████████████████████████████| 5/5 [59:02<00:00, 708.52s/it]
+### loading Korean FrameNet 1.1 data...
+	# of instances in training data: 17838
+	# of instances in dev data: 2548
+	# of instances in test data: 5097
+### an example of training data
+[
+	 ['태풍', 'Hugo가', '남긴', '피해들과', '회사', '내', '몇몇', '주요', '부서들의', '저조한', '실적들을', '반영하여,', 'Aetna', 'Life', 'and', 'Casualty', 'Co.의', '3분기', '<tgt>', '순이익이', '</tgt>', '182.6', '백만', '달러', '또는', '주당', '1.63', '달러로', '22', '%', '하락하였다.']
+	 ['_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '이익.n', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_']
+	 ['_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', 'Earnings_and_losses', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_']
+	 ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'B-Earner', 'I-Earner', 'I-Earner', 'I-Earner', 'I-Earner', 'B-Time', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']
+]
+your model would be saved at /disk_4/resource/models/kfn1.1/joint/
+Train loss: 3.119898317720687
+Train loss: 2.2764679090045656
+Train loss: 1.7321581368970822
+Train loss: 1.357908430096079
+Train loss: 1.0822545231125429
+Train loss: 0.8744936867548466
+Train loss: 0.7118037902132013
+Train loss: 0.5870801649581713
+Train loss: 0.4802478618751942
+Train loss: 0.39700670773398383
+Train loss: 0.32626290473268765
+Train loss: 0.2775793838074441
+Train loss: 0.23434277252615843
+Train loss: 0.2018812727236358
+Train loss: 0.17315236989062893
+Train loss: 0.15050732108785966
+Train loss: 0.13170878926268254
+Train loss: 0.11457754456160263
+Train loss: 0.10079117886580494
+Train loss: 0.09339797498753531
 ...training is done
-model: /disk_4/resource/models/kfn1.0/epoch-3-frameid.pt
-frameid_tgt.py:424: UserWarning: Implicit dimension choice for softmax has been deprecated. Change the call to include dim=X as an argument.
-  b_pred_logits = sm(b_pred_logits).view(1, -1)
-Accuracy: 0.8089913281606572
-result is written to /disk_4/resource/models/kfn1.0/result.txt
+model: /disk_4/resource/models/kfn1.1/joint/epoch-0-joint.pt
+FrameId Accuracy: 0.7420051010398273
+ArgId F1: 0.03853897037676158
+model: /disk_4/resource/models/kfn1.1/joint/epoch-6-joint.pt
+FrameId Accuracy: 0.8083186187953698
+ArgId F1: 0.34716981132075475
+model: /disk_4/resource/models/kfn1.1/joint/epoch-13-joint.pt
+FrameId Accuracy: 0.814204433980773
+ArgId F1: 0.4030155101031947
+model: /disk_4/resource/models/kfn1.1/joint/epoch-11-joint.pt
+FrameId Accuracy: 0.8151854031783402
+ArgId F1: 0.3920415441406495
+model: /disk_4/resource/models/kfn1.1/joint/epoch-16-joint.pt
+FrameId Accuracy: 0.8108691387090445
+ArgId F1: 0.4204404850284583
+model: /disk_4/resource/models/kfn1.1/joint/epoch-14-joint.pt
+FrameId Accuracy: 0.814204433980773
+ArgId F1: 0.4148292921272827
+model: /disk_4/resource/models/kfn1.1/joint/epoch-7-joint.pt
+FrameId Accuracy: 0.811065332548558
+ArgId F1: 0.3451561672842774
+model: /disk_4/resource/models/kfn1.1/joint/epoch-3-joint.pt
+FrameId Accuracy: 0.794585050029429
+ArgId F1: 0.274242536484184
+model: /disk_4/resource/models/kfn1.1/joint/epoch-8-joint.pt
+FrameId Accuracy: 0.8132234647832058
+ArgId F1: 0.3533559676155654
+model: /disk_4/resource/models/kfn1.1/joint/epoch-9-joint.pt
+FrameId Accuracy: 0.8144006278202864
+ArgId F1: 0.3704112275540847
+model: /disk_4/resource/models/kfn1.1/joint/epoch-19-joint.pt
+FrameId Accuracy: 0.8171473415734746
+ArgId F1: 0.4432983360962731
+model: /disk_4/resource/models/kfn1.1/joint/epoch-10-joint.pt
+FrameId Accuracy: 0.8118501079066117
+ArgId F1: 0.38189311179433505
+model: /disk_4/resource/models/kfn1.1/joint/epoch-5-joint.pt
+FrameId Accuracy: 0.8108691387090445
+ArgId F1: 0.33080404685835996
+model: /disk_4/resource/models/kfn1.1/joint/epoch-15-joint.pt
+FrameId Accuracy: 0.8181283107710418
+ArgId F1: 0.4249622926093515
+model: /disk_4/resource/models/kfn1.1/joint/epoch-17-joint.pt
+FrameId Accuracy: 0.8134196586227193
+ArgId F1: 0.4248081056186675
+model: /disk_4/resource/models/kfn1.1/joint/epoch-1-joint.pt
+FrameId Accuracy: 0.775358053757112
+ArgId F1: 0.1529773274644963
+model: /disk_4/resource/models/kfn1.1/joint/epoch-4-joint.pt
+FrameId Accuracy: 0.8081224249558564
+ArgId F1: 0.313073957237995
+model: /disk_4/resource/models/kfn1.1/joint/epoch-2-joint.pt
+FrameId Accuracy: 0.7938002746713754
+ArgId F1: 0.23737338456164864
+model: /disk_4/resource/models/kfn1.1/joint/epoch-12-joint.pt
+FrameId Accuracy: 0.8149892093388268
+ArgId F1: 0.39954813009096857
+model: /disk_4/resource/models/kfn1.1/joint/epoch-18-joint.pt
+FrameId Accuracy: 0.8165587600549343
+ArgId F1: 0.4354261160181428
+result is written to /disk_4/resource/models/kfn1.1/joint/result.txt
+...all process is done during 13 days, 8:45:49.087957

@@ -4,6 +4,8 @@ import glob
 import json
 sys.path.insert(0,'../')
 sys.path.insert(0,'../../')
+
+import numpy as np
 # from src import models
 import models
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
@@ -40,7 +42,26 @@ def load_fn_data(fn_dir):
                 tok_str.append(token[1])
                 tok_lu.append(token[12])
                 tok_frame.append(token[13])
-                tok_fe.append(token[14])
+                
+                if 'B-' in token[14]:
+                    old_fe = token[14].split('B-')[-1]
+                    if '-' in old_fe:
+                        new_fe = old_fe.replace('-','_')
+                    else:
+                        new_fe = old_fe
+                    arg = 'B-'+new_fe
+                    
+                elif 'I-' in token[14]:
+                    old_fe = token[14].split('I-')[-1]
+                    if '-' in old_fe:
+                        new_fe = old_fe.replace('-','_')
+                    else:
+                        new_fe = old_fe
+                    arg = 'I-'+new_fe
+                else:
+                    arg = token[14]
+                                      
+                tok_fe.append(arg)
             sent_list = []
             sent_list.append(tok_str)
             sent_list.append(tok_lu)
@@ -60,6 +81,7 @@ def get_masks(datas, mapdata, num_label=2):
     masks = []
     for idx in datas:
         mask = torch.zeros(num_label)
+#         mask[mask==0] = np.NINF
         try:
             candis = mapdata[str(int(idx[0]))]
         except KeyboardInterrupt:
