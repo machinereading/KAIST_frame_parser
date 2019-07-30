@@ -2,16 +2,18 @@
 **\*\*\*\*\* \[Update\] July, 2019  \*\*\*\*\***
 
 KAIST_frame_parser is available for [Korean FrameNet](https://github.com/machinereading/koreanframenet).
-KAIST_frame_parser consists of two parsers. (1) BERT-based (the newest version), and (2) Phrase Dependency-based (called SRL-based). 
+KAIST_frame_parser consists of two parsers. (1) BERT-based (the newest version), and (2) Phrase Dependency-based (older version, called SRL-based). 
 
 ## About
 KAIST-frame-parser is a semantic parser to understand the meaning of texts in terms of [FrameNet](https://framenet.icsi.berkeley.edu/fndrupal/). 
 
 **frame** (frame semantics) is a schematic representation of a situation or an event. 
 For an example sentence, '헤밍웨이는 1899년 7월 21일 일리노이에서 태어났고, 62세에 자살로 사망했다.', KAIST-frame-parser identifies several frames such as `Being_born` and `Death` for Korean lexical units (e.g. 태어나다.v and 사망하다.v)
+
 <img src="./images/framenet.png" width="60%" height="60%">
 
-Our model is based on the BERT with fine-tuning. The model predict Frames and their arguments jointly
+Our model is based on the BERT with fine-tuning. The model predict Frames and their arguments jointly.
+
 <img src="./images/framenet-bert.png" width="60%" height="60%">
 
 ## prerequisite
