@@ -49,7 +49,7 @@ cp ./data/bert-multilingual-cased-dict-add-frames ~/.pytorch-pretrained-bert/962
 **Download the pretrained model**
 
 Download two pretrained model files to `{your_model_dir}` (e.g. `/home/model/bert_ko_srl_model.pt`). 
-* **Download:** ([click](https://drive.google.com/open?id=1lmyFhrr77oNYZlo0sYsTJFz8stXscoEr))
+* **Download:** ([click](https://drive.google.com/open?id=1afsQcA47wQcTEwOHWGti26zPm6nFNOEv))
 
 **Import bert_based_parser (in your python code)**
 (make sure that your code is in a parent folder of BERT_for_Korean_SRL)
